@@ -30,7 +30,7 @@ type PdfMetrics struct {
 func NewAd(id string) *Ad {
 	a := new(Ad)
 	a.id = id
-	a.fileName = fmt.Sprintf("downloads/ad-%s.pdf", a.id)
+	a.fileName = fmt.Sprintf("downloads/ad-%s.jpg", a.id)
 	a.processed = false
 	a.deleted = false
 	return a
@@ -195,7 +195,7 @@ func (coc CallOcrClient) Process(in chan *Ad) chan *Ad {
 					ocrclientReq := fmt.Sprintf("{\"image_path\":\"%s/downloads/ad-%s-1.png\"}", os.Getenv("PWD"), ad.id)
 					jsonStr := []byte(ocrclientReq)
 
-					req, err := http.NewRequest("POST", "http://localhost:8082/ocrreport", bytes.NewBuffer(jsonStr))
+					req, err := http.NewRequest("POST", "http://192.168.99.101:8082/ocrreport", bytes.NewBuffer(jsonStr))
 					client := &http.Client{}
 					resp, err := client.Do(req)
 					if err != nil {

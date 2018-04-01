@@ -13,7 +13,7 @@ import (
 )
 
 func (a *Ad) Download() error {
-	url := fmt.Sprintf("http://s3.amazonaws.com/ownlocal.adforge.production/ads/%s/original_pdfs.pdf", a.id)
+	url := fmt.Sprintf("http://s3.amazonaws.com/ownlocal.adforge.production/ads/%s/large_images.jpg", a.id)
 	output, err := os.Create(a.fileName)
 	defer output.Close()
 
@@ -27,7 +27,7 @@ func (a *Ad) Download() error {
 	}
 	jar, err := cookiejar.New(nil)
 	if err != nil {
-		log.Fatal("Error while creating cookie jar", url, "-", err)
+		log.Error("Error while creating cookie jar", url, "-", err)
 		return err
 	}
 	client.Jar = jar
@@ -70,7 +70,7 @@ func getAdIDsAPI(date string, limit int) error {
 
 	response, err := http.Get(url)
 	if err != nil {
-		log.Fatal("GET failed", err)
+		log.Error("GET failed", err)
 		return err
 	}
 
@@ -79,7 +79,7 @@ func getAdIDsAPI(date string, limit int) error {
 	var data Ad
 	err = json.Unmarshal(body, &data)
 	if err != nil {
-		log.Fatal("%T\n%s\n%#v\n", err, err, err)
+		log.Error("%T\n%s\n%#v\n", err, err, err)
 	}
 	log.Info(data)
 
@@ -87,7 +87,7 @@ func getAdIDsAPI(date string, limit int) error {
 		ids = append(ids, string(id))
 	}
 	if len(ids) == 0 {
-		log.Fatal("Ad IDs are were not retrived from the API")
+		log.Error("Ad IDs are were not retrived from the API")
 	}
 	log.Info(ids)
 	return nil
